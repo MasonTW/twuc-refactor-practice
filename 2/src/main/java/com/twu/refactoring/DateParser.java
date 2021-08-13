@@ -42,16 +42,7 @@ public class DateParser {
         } else {
             hour = verifyHours();
 
-            try {
-                String minuteString = dateAndTimeString.substring(14, 16);
-                minute = Integer.parseInt(minuteString);
-            } catch (StringIndexOutOfBoundsException e) {
-                throw new IllegalArgumentException("Minute string is less than 2 characters");
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Minute is not an integer");
-            }
-            if (minute < 0 || minute > 59)
-                throw new IllegalArgumentException("Minute cannot be less than 0 or more than 59");
+            minute = verifyMinute();
 
         }
 
@@ -60,6 +51,21 @@ public class DateParser {
         calendar.set(year, month - 1, date, hour, minute, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
+    }
+
+    private int verifyMinute() {
+        int minute;
+        try {
+            String minuteString = dateAndTimeString.substring(14, 16);
+            minute = Integer.parseInt(minuteString);
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Minute string is less than 2 characters");
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Minute is not an integer");
+        }
+        if (minute < 0 || minute > 59)
+            throw new IllegalArgumentException("Minute cannot be less than 0 or more than 59");
+        return minute;
     }
 
     private int verifyHours() {
