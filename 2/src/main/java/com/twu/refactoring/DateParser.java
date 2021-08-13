@@ -34,31 +34,13 @@ public class DateParser {
 
         month = verifyMonth();
 
-        try {
-            String dateString = dateAndTimeString.substring(8, 10);
-            date = Integer.parseInt(dateString);
-        } catch (StringIndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("Date string is less than 2 characters");
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Date is not an integer");
-        }
-        if (date < 1 || date > 31)
-            throw new IllegalArgumentException("Date cannot be less than 1 or more than 31");
+        date = verifyDate();
 
         if (dateAndTimeString.substring(11, 12).equals("Z")) {
             hour = 0;
             minute = 0;
         } else {
-            try {
-                String hourString = dateAndTimeString.substring(11, 13);
-                hour = Integer.parseInt(hourString);
-            } catch (StringIndexOutOfBoundsException e) {
-                throw new IllegalArgumentException("Hour string is less than 2 characters");
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Hour is not an integer");
-            }
-            if (hour < 0 || hour > 23)
-                throw new IllegalArgumentException("Hour cannot be less than 0 or more than 23");
+            hour = verifyHours();
 
             try {
                 String minuteString = dateAndTimeString.substring(14, 16);
@@ -78,6 +60,36 @@ public class DateParser {
         calendar.set(year, month - 1, date, hour, minute, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
+    }
+
+    private int verifyHours() {
+        int hour;
+        try {
+            String hourString = dateAndTimeString.substring(11, 13);
+            hour = Integer.parseInt(hourString);
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Hour string is less than 2 characters");
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Hour is not an integer");
+        }
+        if (hour < 0 || hour > 23)
+            throw new IllegalArgumentException("Hour cannot be less than 0 or more than 23");
+        return hour;
+    }
+
+    private int verifyDate() {
+        int date;
+        try {
+            String dateString = dateAndTimeString.substring(8, 10);
+            date = Integer.parseInt(dateString);
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("Date string is less than 2 characters");
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Date is not an integer");
+        }
+        if (date < 1 || date > 31)
+            throw new IllegalArgumentException("Date cannot be less than 1 or more than 31");
+        return date;
     }
 
     private int verifyMonth() {
