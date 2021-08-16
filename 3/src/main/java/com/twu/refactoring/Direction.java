@@ -1,40 +1,38 @@
 package com.twu.refactoring;
 
 public class Direction {
-    private final char direction;
+    private final char direction;;
+    public DirectionSpecific directionSpecific;
+
 
     public Direction(char direction) {
         this.direction = direction;
+        this.directionSpecific = createSpecificDirection(direction);
+    }
+
+
+
+    public DirectionSpecific createSpecificDirection (char direction) {
+        switch (direction) {
+            case 'N':
+                return new DirectionNorth();
+            case 'S':
+                return new DirectionSouth();
+            case 'E':
+                return new DirectionEast();
+            case 'W':
+                return new DirectionWest();
+            default:
+                throw  new IllegalArgumentException();
+        }
     }
 
     public Direction turnRight() {
-        switch (direction) {
-            case 'N':
-                return new Direction('E');
-            case 'S':
-                return new Direction('W');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
-        }
+     return directionSpecific.turnRight();
     }
 
     public Direction turnLeft() {
-        switch (direction) {
-            case 'N':
-                return new Direction('W');
-            case 'S':
-                return new Direction('E');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
-        }
+      return directionSpecific.turnLeft();
     }
 
     @Override
@@ -59,3 +57,5 @@ public class Direction {
         return "Direction{direction=" + direction + '}';
     }
 }
+
+
